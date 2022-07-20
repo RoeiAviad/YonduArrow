@@ -1,2 +1,2 @@
 # LaserAim
-Aiming a Laser using Python, OpenCV and Arduino
+Aiming a Laser using Python, OpenCV and Arduino.
