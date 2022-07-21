@@ -1,2 +1,2 @@
-# LaserAim
-Aiming a Laser using Python, OpenCV and Arduino.
+# YonduArrow
+A game of Yondu's arrow, developed in Python.
