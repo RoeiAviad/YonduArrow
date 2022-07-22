@@ -2,6 +2,7 @@ from cv2 import threshold
 import cv2
 import dlib
 import numpy as np
+from screeninfo import get_monitors
 
 def shape_to_np(shape, dtype="int"):
 	# initialize the list of (x, y)-coordinates
@@ -33,7 +34,6 @@ def contouring(thresh, mid, img, right=False):
     except:
         return np.inf
 
-
 def light_level(img):
     avg_color_per_row = np.average(img, axis=0)
     avg_color = np.average(avg_color_per_row, axis=0)
@@ -53,6 +53,12 @@ def eyes_relative(shape, eyes):
 
     return np.subtract(eyes[0], O[0]), np.subtract(eyes[1], O[1])
 
+def gaze_pos(gaze):
+    global corners
+    x = (gaze[0] - corners[0][0]) / (corners[1][0] - corners[0][0])
+    y = (gaze[1] - corners[0][1]) / (corners[3][1] - corners[0][1])
+    return x, y
+
 DIMS = (640, 480)
 
 detector = dlib.get_frontal_face_detector()
@@ -70,13 +76,21 @@ kernel = np.ones((9, 9), np.uint8)
 
 def nothing(x):
     pass
-# cv2.createTrackbar('threshold', 'image', 0, 255, nothing)
+
+corners = []
+dim_corners = []
+real_dims = []
+for m in get_monitors():
+    if m.is_primary:
+        real_dims = [m.width, m.height]
+        dim_corners = [(8, 8), (m.width - 8, 8), (m.width - 8, m.height - 8), (8, m.height - 8)]
 
 while(True):
     ret, img = cap.read()
 
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     rects = detector(gray, 1)
+    gaze = None
     for rect in rects:
         shape = predictor(gray, rect)
         shape = shape_to_np(shape)
@@ -89,8 +103,7 @@ while(True):
         eyes[mask] = [255, 255, 255]
         mid = (shape[42][0] + shape[39][0]) // 2
         eyes_gray = cv2.cvtColor(eyes, cv2.COLOR_BGR2GRAY)
-        # threshold = cv2.getTrackbarPos('threshold', 'image')
-        # print(light_level(img))
+
         threshold = 35 if light_level(img) < 100 else 40 if light_level(img) < 150 else 50
         _, thresh = cv2.threshold(eyes_gray, threshold, 255, cv2.THRESH_BINARY)
         thresh = cv2.erode(thresh, None, iterations=2) #1
@@ -100,17 +113,33 @@ while(True):
         eyes = [None, None]
         eyes[0] = contouring(thresh[:, 0:mid], mid, img)
         eyes[1] = contouring(thresh[:, mid:], mid, img, True)
-        # print(eyes_relative(shape, eyes))
+
         for (x, y) in shape[36:48]:
             cv2.circle(img, (x, y), 2, (255, 0, 0), -1)
 
         gaze = eyes_relative(shape, eyes)
-        cv2.circle(img, tuple(np.add(np.divide(DIMS, 2), np.average(gaze, 0) * 50).astype(int)), 4, (0, 0, 0), 2)
-    # show the image with the face detections + facial landmarks
+        if gaze != np.inf:
+            cv2.circle(img, tuple(np.add(np.divide(DIMS, 2), np.average(gaze, 0) * 50).astype(int)), 4, (0, 0, 0), 2)
+
     img = cv2.flip(img, 1)
     thresh = cv2.flip(thresh, 1)
-    cv2.imshow('eyes', img)
-    cv2.imshow("image", thresh)
+
+    blank_image = np.zeros(shape=[real_dims[1], real_dims[0], 3], dtype=np.uint8)
+
+    if len(corners) < 4:
+        cv2.circle(blank_image, dim_corners[len(corners)], 4, (255, 0, 0), 2)
+        if cv2.waitKey(1) & 0xFF == ord(' ') and gaze is not None and gaze != np.inf and len(gaze) == 2:
+            corners.append(np.average(gaze, 0))
+    elif gaze is not None and gaze != np.inf and len(gaze) == 2:
+        pos = gaze_pos(np.average(gaze, 0))
+        if 0 < pos[0] < 1 and 0 < pos[1] < 1:
+            cv2.circle(blank_image, tuple((np.array(pos) * np.array(real_dims)).astype(int)), 4, (255, 255, 255), 2)
+
+    cv2.namedWindow("window", cv2.WND_PROP_FULLSCREEN)
+    cv2.setWindowProperty("window",cv2.WND_PROP_FULLSCREEN,cv2.WINDOW_FULLSCREEN)
+    cv2.imshow("window", blank_image)
+    cv2.imshow("image", img)
+
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
     
