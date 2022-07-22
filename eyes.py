@@ -3,6 +3,7 @@ import cv2
 import dlib
 import numpy as np
 from screeninfo import get_monitors
+from torch import real
 
 def shape_to_np(shape, dtype="int"):
 	# initialize the list of (x, y)-coordinates
@@ -63,6 +64,13 @@ def gaze_pos(gaze):
 def round_parts(num, parts):
     return round(num * parts) / parts
 
+def putText(img, text):
+    font = cv2.FONT_HERSHEY_DUPLEX
+    textsize = cv2.getTextSize(text, font, 1.6, 2)[0]
+    textX = (img.shape[1] - textsize[0]) // 2
+    textY = (img.shape[0] + textsize[1]) // 2
+    cv2.putText(blank_image, text, (textX, textY), font, 1.6, (255, 0, 0))
+
 DIMS = (640, 480)
 
 detector = dlib.get_frontal_face_detector()
@@ -122,23 +130,21 @@ while(True):
             cv2.circle(img, (x, y), 2, (255, 0, 0), -1)
 
         gaze = eyes_relative(shape, eyes)
-        if gaze != np.inf:
-            cv2.circle(img, tuple(np.add(np.divide(DIMS, 2), np.average(gaze, 0) * 50).astype(int)), 4, (0, 0, 0), 2)
-
+        
     img = cv2.flip(img, 1)
     thresh = cv2.flip(thresh, 1)
 
     blank_image = np.zeros(shape=[real_dims[1], real_dims[0], 3], dtype=np.uint8)
 
     if len(corners) < 4:
-        cv2.circle(blank_image, dim_corners[len(corners)], 4, (255, 0, 0), 2)
+        putText(blank_image, "Look at the dot and press Space!")
+        cv2.circle(blank_image, dim_corners[len(corners)], 4, (255, 0, 0), 8)
         if cv2.waitKey(1) & 0xFF == ord(' ') and gaze is not None and gaze != np.inf and len(gaze) == 2:
             corners.append(np.average(gaze, 0))
     elif gaze is not None and gaze != np.inf and len(gaze) == 2:
         pos = gaze_pos(np.average(gaze, 0))
-        print(pos)
         if 0 < pos[0] < 1 and 0 < pos[1] < 1:
-            cv2.circle(blank_image, tuple((np.array(pos) * np.array(real_dims)).astype(int)), 4, (255, 255, 255), 2)
+            cv2.circle(blank_image, tuple((np.array(pos) * np.array(real_dims)).astype(int)), 8, (255, 255, 255), 16)
 
     cv2.namedWindow("window", cv2.WND_PROP_FULLSCREEN)
     cv2.setWindowProperty("window",cv2.WND_PROP_FULLSCREEN,cv2.WINDOW_FULLSCREEN)
