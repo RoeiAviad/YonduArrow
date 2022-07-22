@@ -53,6 +53,7 @@ def eyes_relative(shape, eyes):
 
     return np.subtract(eyes[0], O[0]), np.subtract(eyes[1], O[1])
 
+DIMS = (640, 480)
 
 detector = dlib.get_frontal_face_detector()
 predictor = dlib.shape_predictor('weights/shape_68.dat')
@@ -99,10 +100,15 @@ while(True):
         eyes = [None, None]
         eyes[0] = contouring(thresh[:, 0:mid], mid, img)
         eyes[1] = contouring(thresh[:, mid:], mid, img, True)
-        print(eyes_relative(shape, eyes))
+        # print(eyes_relative(shape, eyes))
         for (x, y) in shape[36:48]:
             cv2.circle(img, (x, y), 2, (255, 0, 0), -1)
+
+        gaze = eyes_relative(shape, eyes)
+        cv2.circle(img, tuple(np.add(np.divide(DIMS, 2), np.average(gaze, 0) * 50).astype(int)), 4, (0, 0, 0), 2)
     # show the image with the face detections + facial landmarks
+    img = cv2.flip(img, 1)
+    thresh = cv2.flip(thresh, 1)
     cv2.imshow('eyes', img)
     cv2.imshow("image", thresh)
     if cv2.waitKey(1) & 0xFF == ord('q'):
