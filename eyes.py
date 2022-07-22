@@ -57,7 +57,11 @@ def gaze_pos(gaze):
     global corners
     x = (gaze[0] - corners[0][0]) / (corners[1][0] - corners[0][0])
     y = (gaze[1] - corners[0][1]) / (corners[3][1] - corners[0][1])
-    return x, y
+    x, y = round_parts(x, 20), round_parts(y, 20)
+    return 0.02 if x < 0 else 0.98 if x > 1 else x, 0.02 if y < 0 else 0.98 if y > 1 else y
+
+def round_parts(num, parts):
+    return round(num * parts) / parts
 
 DIMS = (640, 480)
 
@@ -132,6 +136,7 @@ while(True):
             corners.append(np.average(gaze, 0))
     elif gaze is not None and gaze != np.inf and len(gaze) == 2:
         pos = gaze_pos(np.average(gaze, 0))
+        print(pos)
         if 0 < pos[0] < 1 and 0 < pos[1] < 1:
             cv2.circle(blank_image, tuple((np.array(pos) * np.array(real_dims)).astype(int)), 4, (255, 255, 255), 2)
 
