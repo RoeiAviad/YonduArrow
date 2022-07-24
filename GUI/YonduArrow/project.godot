@@ -15,7 +15,7 @@ config/icon="res://icon.png"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/vpainter/plugin.cfg" )
+enabled=PoolStringArray(  )
 
 [gdnative]
 

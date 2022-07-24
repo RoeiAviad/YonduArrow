@@ -1,8 +1,10 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://scenes/Fist.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scenes/Arrow.tscn" type="PackedScene" id=2]
 [ext_resource path="res://scripts/Fist.py" type="Script" id=3]
+[ext_resource path="res://scripts/Arrow.py" type="Script" id=4]
+[ext_resource path="res://scripts/Main.py" type="Script" id=5]
 
 [sub_resource type="BoxShape" id=1]
 extents = Vector3( 60, 1, 60 )
@@ -15,6 +17,7 @@ material = SubResource( 3 )
 size = Vector3( 60, 2, 60 )
 
 [node name="Main" type="Node"]
+script = ExtResource( 5 )
 
 [node name="Ground" type="StaticBody" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 0 )
@@ -27,7 +30,7 @@ mesh = SubResource( 2 )
 material/0 = null
 
 [node name="DirectionalLight" type="DirectionalLight" parent="."]
-transform = Transform( 1, 0, 0, 0, -0.541576, 0.840652, 0, -0.840652, -0.541576, 0, 4.32466, 0 )
+transform = Transform( 1, 0, 0, 0, -0.198564, 0.980088, 0, -0.980088, -0.198564, 0, 4.32466, 0 )
 shadow_enabled = true
 
 [node name="CameraPivot" type="Position3D" parent="."]
@@ -40,5 +43,9 @@ transform = Transform( 1, 0, 0, 0, 0.928932, 0.370249, 0, -0.370249, 0.928932, 0
 transform = Transform( 0.822889, 0, -0.568203, 0, 1, 0, 0.568203, 0, 0.822889, 0.100057, 0.64, 0.818333 )
 script = ExtResource( 3 )
 
-[node name="Arrow" parent="." instance=ExtResource( 2 )]
-transform = Transform( -8.74228e-09, 0, -0.2, 0, 0.2, 0, 0.2, 0, -8.74228e-09, 0.173164, 0.473771, 0 )
+[node name="ArrowPivot" type="Position3D" parent="."]
+transform = Transform( 0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -0.002455, 0.0128473, 0.366237 )
+script = ExtResource( 4 )
+
+[node name="Arrow" parent="ArrowPivot" instance=ExtResource( 2 )]
+transform = Transform( 2, 0, 0, 0, 2, 0, 0, 0, 2, 0.02455, -0.128473, -3.66237 )
