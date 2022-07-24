@@ -20,7 +20,7 @@ size = Vector3( 60, 2, 60 )
 script = ExtResource( 5 )
 
 [node name="Ground" type="StaticBody" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0 )
 
 [node name="CollisionShape" type="CollisionShape" parent="Ground"]
 shape = SubResource( 1 )
@@ -44,8 +44,8 @@ transform = Transform( 0.822889, 0, -0.568203, 0, 1, 0, 0.568203, 0, 0.822889, 0
 script = ExtResource( 3 )
 
 [node name="ArrowPivot" type="Position3D" parent="."]
-transform = Transform( 0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -0.002455, 0.0128473, 0.366237 )
+transform = Transform( 0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, 0, 0.25, -0.0756877 )
 script = ExtResource( 4 )
 
 [node name="Arrow" parent="ArrowPivot" instance=ExtResource( 2 )]
-transform = Transform( 2, 0, 0, 0, 2, 0, 0, 0, 2, 0.02455, -0.128473, -3.66237 )
+transform = Transform( 2, 0, 0, 0, 2, 0, 0, 0, 2, 0.0110544, -0.110736, -2.21376 )

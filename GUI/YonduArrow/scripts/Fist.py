@@ -16,7 +16,7 @@ class Fist(KinematicBody):
 		self.call_func()
 		
 	def up(self):
-		if self.rotate_counter < 90 / self.speed:
+		if self.rotate_counter < 90 // self.speed:
 			self.rotation_degrees += Vector3(self.speed, 0, 0)
 			self.translation += Vector3(0, self.speed / 900, -self.speed / 900)
 			self.rotate_counter += 1
@@ -38,3 +38,6 @@ class Fist(KinematicBody):
 			self.up()
 		elif self.moving_func == 2:
 			self.down()
+			
+	def is_up(self):
+		return self.rotate_counter == 90 // self.speed

@@ -20,10 +20,10 @@ data = PoolVector3Array( -1.5777, 0.0449, 0.031, -0.8611, 0.0628, 0.0373, -1.569
 transform = Transform( 0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0 )
 
 [node name="MeshInstance" type="MeshInstance" parent="."]
-transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0 )
+transform = Transform( -2.62268e-08, 0, -1, 0, 1, 0, 0.6, 0, -4.37114e-08, 0, 0, 0 )
 mesh = ExtResource( 2 )
 material/0 = SubResource( 2 )
 
 [node name="CollisionShape" type="CollisionShape" parent="."]
-transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0 )
+transform = Transform( -2.62268e-08, 0, -1, 0, 1, 0, 0.6, 0, -4.37114e-08, 0, 0, 0 )
 shape = SubResource( 3 )
