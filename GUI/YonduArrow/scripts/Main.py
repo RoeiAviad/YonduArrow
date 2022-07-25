@@ -1,11 +1,12 @@
 from godot import exposed, export
 from godot import *
-from scripts.Hands import Hands
+from scripts.ImageDetector import ImageDetector
+from scripts.Global import Global
 
 @exposed
 class Main(Node):
 	
-	hands = export(bool)		# (Hands)
+	detector = export(bool)		# (ImageDetector)
 	frame_counter = export(int, default=0)
 	detection = export(bool)	# (Tuple)
 	fist = export(KinematicBody)
@@ -13,7 +14,7 @@ class Main(Node):
 	arrow_hand = export(bool, default=False)
 
 	def _ready(self):
-		self.hands = Hands()
+		self.detector = ImageDetector()
 		self.detection = False, False
 		self.fist = self.get_node("Fist")
 		self.arrow = self.get_node("ArrowPivot")
@@ -25,7 +26,7 @@ class Main(Node):
 	def process_fist(self, delta):
 		temp_frames = round((1 / delta) / 6)
 		if self.frame_counter % temp_frames == 0:
-			self.detection = self.hands.detect()
+			self.detection = self.detector.detect_hand()
 		self.frame_counter = (self.frame_counter + 1) % temp_frames
 		
 		if self.detection[0] and self.detection[1]:
@@ -37,13 +38,13 @@ class Main(Node):
 		mouse = self.get_viewport().get_mouse_position()
 		
 		z_index = 8
-		for i in range(1, 81):
+		for i in range(1, 81):		# search for correct place
 			if abs(self.get_node("CameraPivot/Camera").project_position(mouse, i / 10).y - 0.25) < 0.1:
 				z_index = i / 10
 				break
 		pos = self.get_node("CameraPivot/Camera").project_position(mouse, z_index)
 		
-		if self.fist.is_up():
+		if self.fist.is_up():		# return to hand
 			pre = Vector3(0.09, 0.5, -0.5)
 			enter = Vector3(0.09, 0.67, 0.76)
 			exit = Vector3(0.09, 0.71, 0.888)
@@ -55,12 +56,11 @@ class Main(Node):
 				self.arrow_hand = True
 				self.arrow.look_at(pre, pre)
 				self.arrow.translation += (exit - self.arrow.translation) * delta * 4
-		elif self.arrow.translation.distance_to(pos) > 0.01:
+		elif self.arrow.translation.distance_to(pos) > 0.01:	# move
 			self.arrow_move(pos, 2, delta)
 			self.arrow_hand = False
-		else:
+		else:		# nothing or gravity
 			self.arrow_hand = False
-		# 	self.arrow.translation += Vector3(0, -self.arrow.translation.y, 0) * delta * 9.8
 
 	def arrow_move(self, pos, speed, delta):
 		self.arrow.look_at(pos, pos)
