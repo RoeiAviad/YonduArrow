@@ -27,13 +27,15 @@
 [node name="Menu" type="Node2D"]
 script = ExtResource( 1 )
 
-[node name="TextureRect" type="TextureRect" parent="."]
+[node name="MenuItems" type="Node2D" parent="."]
+
+[node name="TextureRect" type="TextureRect" parent="MenuItems"]
 margin_right = 3840.0
 margin_bottom = 2160.0
 rect_scale = Vector2( 0.5, 0.5 )
 texture = ExtResource( 2 )
 
-[node name="ButtonStart" type="Button" parent="."]
+[node name="ButtonStart" type="Button" parent="MenuItems"]
 margin_left = 1500.0
 margin_top = 239.0
 margin_right = 1924.0
@@ -45,13 +47,13 @@ custom_styles/focus = SubResource( 3 )
 custom_styles/disabled = SubResource( 4 )
 custom_styles/normal = SubResource( 5 )
 
-[node name="ButtonShape" type="Polygon2D" parent="ButtonStart"]
+[node name="ButtonShape" type="Polygon2D" parent="MenuItems/ButtonStart"]
 show_behind_parent = true
 position = Vector2( -1500, -239 )
 color = Color( 1, 1, 1, 0.6 )
 polygon = PoolVector2Array( 1924, 238, 1924, 964, 1650, 964, 1529, 885, 1529, 840, 1514, 833, 1514, 821, 1503, 809, 1503, 750, 1526, 733, 1524, 338, 1510, 326, 1510, 281, 1624, 238 )
 
-[node name="ButtonText" type="RichTextLabel" parent="ButtonStart"]
+[node name="ButtonText" type="RichTextLabel" parent="MenuItems/ButtonStart"]
 show_behind_parent = true
 margin_left = 63.0
 margin_top = 91.0
@@ -72,7 +74,7 @@ R
 T"
 scroll_active = false
 
-[node name="ButtonExit" type="Button" parent="."]
+[node name="ButtonExit" type="Button" parent="MenuItems"]
 margin_left = -5.0
 margin_top = 251.0
 margin_right = 446.0
@@ -84,13 +86,13 @@ custom_styles/focus = SubResource( 8 )
 custom_styles/disabled = SubResource( 9 )
 custom_styles/normal = SubResource( 10 )
 
-[node name="ButtonShape" type="Polygon2D" parent="ButtonExit"]
+[node name="ButtonShape" type="Polygon2D" parent="MenuItems/ButtonExit"]
 show_behind_parent = true
 position = Vector2( 5, -251 )
 color = Color( 1, 1, 1, 0.6 )
 polygon = PoolVector2Array( 318, 250, 435, 298, 435, 338, 423, 343, 425, 728, 444, 745, 444, 807, 435, 809, 435, 819, 418, 831, 420, 873, 304, 968, -8, 968, -12, 250 )
 
-[node name="ButtonText" type="RichTextLabel" parent="ButtonExit"]
+[node name="ButtonText" type="RichTextLabel" parent="MenuItems/ButtonExit"]
 show_behind_parent = true
 margin_left = 321.0
 margin_top = 129.0
@@ -109,6 +111,7 @@ I
 T"
 scroll_active = false
 
-[connection signal="mouse_entered" from="ButtonStart" to="." method="on_button_in" binds= [ 0 ]]
-[connection signal="mouse_entered" from="ButtonExit" to="." method="on_button_in" binds= [ 1 ]]
-[connection signal="pressed" from="ButtonExit" to="." method="on_button_exit"]
+[connection signal="mouse_entered" from="MenuItems/ButtonStart" to="." method="on_button_in" binds= [ 0 ]]
+[connection signal="pressed" from="MenuItems/ButtonStart" to="." method="on_button_start"]
+[connection signal="mouse_entered" from="MenuItems/ButtonExit" to="." method="on_button_in" binds= [ 1 ]]
+[connection signal="pressed" from="MenuItems/ButtonExit" to="." method="on_button_exit"]
