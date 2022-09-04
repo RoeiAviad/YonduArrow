@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://scenes/Fist.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scenes/Arrow.tscn" type="PackedScene" id=2]
@@ -7,6 +7,7 @@
 [ext_resource path="res://scripts/Main.py" type="Script" id=5]
 [ext_resource path="res://art/FloorTexture.png" type="Texture" id=6]
 [ext_resource path="res://art/Space.webp" type="Texture" id=7]
+[ext_resource path="res://scripts/ArrowTrail.py" type="Script" id=8]
 
 [sub_resource type="BoxShape" id=1]
 extents = Vector3( 60, 1, 60 )
@@ -28,6 +29,8 @@ panorama = ExtResource( 7 )
 background_mode = 2
 background_sky = SubResource( 4 )
 ambient_light_energy = 5.0
+
+[sub_resource type="SphereMesh" id=6]
 
 [node name="Main" type="Node"]
 script = ExtResource( 5 )
@@ -66,3 +69,13 @@ transform = Transform( 2, 0, 0, 0, 2, 0, 0, 0, 2, 0.0110544, -0.110736, -2.21376
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource( 5 )
+
+[node name="ArrowTrail" type="Node" parent="."]
+script = ExtResource( 8 )
+
+[node name="Point_0" type="MeshInstance" parent="ArrowTrail"]
+transform = Transform( 0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, 0, 0.25, -0.076 )
+mesh = SubResource( 6 )
+material/0 = null
+
+[node name="Line" type="ImmediateGeometry" parent="ArrowTrail"]

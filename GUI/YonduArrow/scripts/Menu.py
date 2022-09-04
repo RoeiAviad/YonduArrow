@@ -22,6 +22,7 @@ class Menu(Node):
 		
 	def on_button_start(self):
 		self.started = True
+		self.get_node("GazeTune").start()
 		self.frame_counter = 0
 		
 	def _process(self, delta):

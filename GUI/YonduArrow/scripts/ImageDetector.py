@@ -5,12 +5,13 @@ import numpy as np
 
 class ImageDetector():
 	
-	def __init__(self):
+	def __init__(self, corners=[]):
 		self.cap = cv2.VideoCapture(0)
 		self.hands_detector = HandDetector(detectionCon=0.8, maxHands=2) 
 		self.eyes_detector = dlib.get_frontal_face_detector()
 		self.eyes_predictor = dlib.shape_predictor('weights/shape_68.dat')
-		self.corners = []
+		self.real_dims = [1920, 1080]
+		self.corners = corners
 		
 	def detect_hand(self):
 		success, img = self.cap.read()
@@ -19,21 +20,36 @@ class ImageDetector():
 		if hands:
 			hand = hands[1] if len(hands) > 1 and hands[1]["type"] == "Right" else hands[0]
 			handType = hand["type"]  # Handtype Left or Right
-			fingers = self.detector.fingersUp(hand)      # which fingers are up
+			fingers = self.hands_detector.fingersUp(hand)      # which fingers are up
 			return handType == "Right", all(finger == 0 for finger in fingers[1:])
 		return False, False
 	
-	def detect_eyes(self):
-		pass
+	def detect_gaze(self):
+		ret, img = self.cap.read()
 		
-	def shape_to_np(shape, dtype="int"):
+		nose = None
+		gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+		rects = self.eyes_detector(gray, 0)
+		for rect in rects:
+			shape = self.eyes_predictor(gray, rect)
+			shape = self.shape_to_np(shape)
+			nose = shape[27]
+			
+		if len(self.corners) < 4:
+			if nose is not None:
+				self.corners.append(nose)
+				nose = None
+
+		return None if nose is None else self.gaze_pos(nose)
+		
+	def shape_to_np(self, shape, dtype="int"):
 		coords = np.zeros((68, 2), dtype=dtype)
 		# for i in range(0, 68):
 		# 	coords[i] = (shape.part(i).x, shape.part(i).y)
 		coords[27] = (shape.part(27).x, shape.part(27).y)
 		return coords
 
-	def gaze_pos(gaze):
+	def gaze_pos(self, gaze):
 		global corners, real_dims
 	
 		def round_parts(num, parts):

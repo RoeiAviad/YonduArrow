@@ -1,7 +1,6 @@
 from godot import exposed, export
 from godot import *
 from scripts.ImageDetector import ImageDetector
-from scripts.Global import Global
 
 @exposed
 class Main(Node):

@@ -5,4 +5,4 @@ from godot import *
 @exposed
 class Global(Node):
 
-	dims = []
+	corners = export(Array, default=Array())

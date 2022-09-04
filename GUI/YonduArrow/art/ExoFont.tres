@@ -7,4 +7,5 @@ size = 72
 outline_size = 5
 outline_color = Color( 0, 0.941176, 1, 1 )
 extra_spacing_bottom = -20
+extra_spacing_char = 5
 font_data = ExtResource( 1 )
