@@ -4,27 +4,26 @@ from godot import *
 
 @exposed
 class Menu(Node):
-	
 	frame_counter = export(int, default=0)
 	CYCLE = export(int, default=200)
-	buttons = export(bool)		# (list[Button])
+	buttons = export(bool)  # (list[Button])
 	started = export(bool, default=False)
-	
+
 	def _ready(self):
 		self.buttons = [self.get_node("MenuItems/ButtonStart"), self.get_node("MenuItems/ButtonExit")]
 
 	def on_button_in(self, button):
 		self.buttons[button].get_node("ButtonShape").color = Color(1, 1, 1, 0.6)
 		self.buttons[button].get_node("ButtonText").modulate = Color(0, 240 / 255, 1, 1)
-		
+
 	def on_button_exit(self):
 		self.get_tree().quit()
-		
+
 	def on_button_start(self):
 		self.started = True
 		self.get_node("GazeTune").start()
 		self.frame_counter = 0
-		
+
 	def _process(self, delta):
 		if not self.started:
 			prec = min(self.frame_counter, self.CYCLE - self.frame_counter) / self.CYCLE * 2

@@ -4,7 +4,6 @@ from godot import *
 
 @exposed
 class Loading(Area2D):
-
 	counter = export(int, default=0)
 	CYCLE = 2
 

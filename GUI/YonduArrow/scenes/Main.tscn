@@ -75,6 +75,7 @@ script = ExtResource( 8 )
 
 [node name="Point_0" type="MeshInstance" parent="ArrowTrail"]
 transform = Transform( 0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, 0, 0.25, -0.076 )
+visible = false
 mesh = SubResource( 6 )
 material/0 = null
 
