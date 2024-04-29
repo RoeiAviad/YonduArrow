@@ -13,12 +13,13 @@ class Main(Node):
 	arrow_hand = export(bool, default=False)
 
 	def _ready(self):
-		self.detector = ImageDetector()
+		self.detector = ImageDetector(self.get_viewport().size)
 		self.detection = False, False
 		self.fist = self.get_node("Fist")
 		self.arrow = self.get_node("ArrowPivot")
 
 	def _process(self, delta):
+		self.detector.process()
 		self.process_fist(delta)
 		self.process_arrow(delta)
 
