@@ -2,6 +2,9 @@ from godot import exposed, export
 from godot import *
 from scripts.ImageDetector import ImageDetector
 
+ARROW_Y = 0.175
+FIST_Y = 0.4
+
 
 @exposed
 class Main(Node):
@@ -40,7 +43,7 @@ class Main(Node):
 		# translate 2D pos into 3D pos
 		z_index = 8
 		for i in range(1, 81):
-			if abs(self.get_node("CameraPivot/Camera").project_position(pos, i / 10).y - 0.25) < 0.1:
+			if abs(self.get_node("CameraPivot/Camera").project_position(pos, i / 10).y - ARROW_Y) < 0.1:
 				z_index = i / 10
 				break
 		return self.get_node("CameraPivot/Camera").project_position(pos, z_index)
@@ -59,9 +62,9 @@ class Main(Node):
 			self.arrow_move(pos, 2, delta)
 
 	def return_to_hand(self, delta):
-		pre = Vector3(0.09, 0.5, -0.5)
-		enter = Vector3(0.09, 0.67, 0.76)
-		exit = Vector3(0.09, 0.71, 0.888)
+		pre = Vector3(0.09, FIST_Y - 0.14, -0.5)
+		enter = Vector3(0.09, FIST_Y + 0.03, 0.76)
+		exit = Vector3(0.09, FIST_Y + 0.07, 0.888)
 		if self.arrow.translation.distance_to(enter) > 0.01 and not self.arrow_hand:
 			speed = 4 if self.arrow.translation.distance_to(enter) > 0.5 else 8
 			self.arrow_move(enter, speed, delta, pre)

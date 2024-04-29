@@ -51,17 +51,17 @@ transform = Transform( 1, 0, 0, 0, -0.198564, 0.980088, 0, -0.980088, -0.198564,
 shadow_enabled = true
 
 [node name="CameraPivot" type="Position3D" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.766274, 1.42605 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.529679, 1.42605 )
 
 [node name="Camera" type="Camera" parent="CameraPivot"]
 transform = Transform( 1, 0, 0, 0, 0.928932, 0.370249, 0, -0.370249, 0.928932, 0, 0, -0.481971 )
 
 [node name="Fist" parent="." instance=ExtResource( 1 )]
-transform = Transform( 0.822889, 0, -0.568203, 0, 1, 0, 0.568203, 0, 0.822889, 0.100057, 0.64, 0.818333 )
+transform = Transform( 0.822889, 0, -0.568203, 0, 1, 0, 0.568203, 0, 0.822889, 0.1, 0.4, 0.818 )
 script = ExtResource( 3 )
 
 [node name="ArrowPivot" type="Position3D" parent="."]
-transform = Transform( 0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, 0, 0.25, -0.0756877 )
+transform = Transform( 0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, 0, 0.175, -0.076 )
 script = ExtResource( 4 )
 
 [node name="Arrow" parent="ArrowPivot" instance=ExtResource( 2 )]
